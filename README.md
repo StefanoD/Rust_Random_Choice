@@ -10,5 +10,5 @@ Chooses samples randomly by their weights/probabilities.
 This algorithm is based on the Low Variance Resampling algorithm.
 
 ### Applications
-- Evolutionary algorithms: Choose the fittest population with fitness **_x_**
-- Resampling of particles with weight **_w_** in Monte Carlo Localization
+- **Evolutionary algorithms**: Choose the fittest population with fitness **_x_**
+- **Monte Carlo Localization**: Resampling of particles with weight **_w_**
