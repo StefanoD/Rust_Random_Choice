@@ -1,4 +1,9 @@
 # Rust Random Choice
 Chooses samples randomly by their weights/probabilities.
 
-Based on Low Variance Resampling algorithm.
+### Advantages
+
+- There is a good diversity for the case that all weights are equally distributed (in contrast to the roulette wheel selection algorithm which tends to select the same sample)
+- O(n) (Roulette wheel selection algorithm: O(n * log n))
+
+This algorithm is based on the Low Variance Resampling algorithm.
