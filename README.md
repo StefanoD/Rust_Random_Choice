@@ -8,3 +8,7 @@ Chooses samples randomly by their weights/probabilities.
 - The sum of the weights don't have to be 1.0, but must not overflow
 
 This algorithm is based on the Low Variance Resampling algorithm.
+
+### Applications
+- Evolutionary algorithms: Choose the fittest population with fitness **_x_**
+- Resampling of particles with weight **_w_** in Monte Carlo Localization
