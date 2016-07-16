@@ -1,0 +1,7 @@
+[package]
+name = "random_choice"
+version = "0.1.0"
+authors = ["Stefano Di Martino <stefano.d@posteo.de>"]
+
+[dependencies]
+rand = "0.3"
