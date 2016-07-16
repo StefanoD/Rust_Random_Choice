@@ -2,10 +2,6 @@ extern crate rand;
 
 use self::rand::{thread_rng, Rng};
 
-
-//pub fn rand_choice<S: Copy + for<'r> Add<&'r S, Output=&S>, T: Iterator<Item=S>>(it: T) {
-//pub fn rand_choice<T: Add>(weights: Vec<T>) {
-
 /**
 * Chooses n samples of weights. The greater the weight the more likely it gets chosen.
 * This function returns only the indices of the weights.
