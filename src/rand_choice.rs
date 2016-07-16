@@ -12,7 +12,7 @@ use self::rand::{thread_rng, Rng};
 * @param n Number of randomly chosen indices by weight.
 * @return Indices of the weights. Randomly chosen by their weight.
 */
-pub fn random_choice(weights: Vec<f64>, n: usize) -> Vec<usize>{
+pub fn random_choice(weights: &Vec<f64>, n: usize) -> Vec<usize>{
     // Save accumulated sum of the weights in order to calculate the intervals
     // between accumulated weights
     let mut accumulated_sum = Vec::with_capacity(weights.len());
@@ -60,7 +60,7 @@ mod tests {
 
         //assert_eq!(6.0, sum);
 
-        let indices = super::random_choice(test_vec, 10 as usize);
+        let indices = super::random_choice(&test_vec, 10 as usize);
 
         for index in indices {
             print!("{}, ", index);
