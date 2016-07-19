@@ -3,67 +3,54 @@ extern crate rand;
 use self::rand::{thread_rng, Rng};
 
 /**
-* Chooses n samples of weights. The greater the weight the more likely it gets chosen.
-* This function returns only the indices of the weights.
+* Chooses n samples by their weights. The greater their weights the more likely they get chosen.
 *
 * @invariant sum of weights must not overflow.
-*
+* @param samples The to be selected samples
 * @param weights Weights that get chosen by their weight/probability. One weight can be greater 1.
 * @param n Number of randomly chosen indices by weight.
-* @return Indices of the weights. Randomly chosen by their weight.
+* @return randomly selected samples by their weight
 */
-pub fn random_choice(weights: &Vec<f64>, n: usize) -> Vec<usize>{
-    // Save accumulated sum of the weights in order to calculate the intervals
-    // between accumulated weights
-    let mut accumulated_sum = Vec::with_capacity(weights.len());
+pub fn random_choice<'a, T>(samples: &'a Vec<T>, weights: &Vec<f64>, n: usize) -> Vec<&'a T>{
+    // TODO Check, if weight.len() > 0 and n > 0
 
-    accumulated_sum.push(weights[0]);
-
-    for i in 1 .. weights.len() {
-        let acc_sum = accumulated_sum[i - 1] + weights[i];
-        accumulated_sum.push(acc_sum);
-    }
-
-    let sum: f64 = accumulated_sum[weights.len() - 1];
+    let sum:f64 = weights.iter().fold(0.0, |acc, &i| acc + i);
     let spoke_gap: f64 = sum / n as f64;
 
     // next_f64() ∈ [0.0, 1.0)
     let spin = thread_rng().next_f64() * spoke_gap;
-    let mut choices: Vec<usize> = Vec::with_capacity(n);
+    
     let mut i: usize = 0;
+    let mut accumulated_weights = weights[0];
+    let mut choices: Vec<&T> = Vec::with_capacity(n);
     let mut current_spoke: f64 = spin;
 
     for _ in 0 .. n {
-        current_spoke += spoke_gap;
-        current_spoke %= sum;
-
-        // accumulated_sum[i] is the interval end
-        // (accumulated_sum[i] - weight[i]) is the interval begin
-        // Following condition must be true: interval begin <= current_spoke < interval end
-        // If the condition is not true, then increment i in order to get the next greater intervals.
-        while accumulated_sum[i] <= current_spoke || (accumulated_sum[i] - weights[i]) > current_spoke {
+        while accumulated_weights < current_spoke {
             i += 1;
-            i %= weights.len();
+            accumulated_weights += weights[i];
         }
-        choices.push(i);
+        choices.push(&samples[i]);
+        current_spoke += spoke_gap;
     }
 
     choices
 }
 
+
 #[cfg(test)]
 mod tests {
     #[test]
     fn basics() {
-        let test_vec = vec![1.0, 2.0, 3.0, 10.0];
+        let test_vec: Vec<f64> = vec![3.1, 1.2, 1.3, 2.0];
         //let sum:f64 = test_vec.iter().fold(0.0, |acc, &i| acc + i);
 
         //assert_eq!(6.0, sum);
 
-        let indices = super::random_choice(&test_vec, 10 as usize);
+        let choices = super::random_choice(&test_vec, &test_vec, 4 as usize);
 
-        for index in indices {
-            print!("{}, ", index);
+        for choice in choices {
+            print!("{}, ", choice);
         }
     }
 }
