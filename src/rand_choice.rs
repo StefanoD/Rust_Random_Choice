@@ -79,4 +79,16 @@ mod tests {
             print!("{}, ", choice);
         }
     }
+
+    #[test]
+    fn test_random_choice_in_place() {
+        let mut samples = vec!["hi", "this", "is", "a", "test!"];
+        let weights: Vec<f64> = vec![1.0, 1.0, 1.0, 1.0, 1.0];
+
+        super::random_choice_in_place(&mut samples, &weights);
+
+        for sample in samples {
+            print!("{}, ", sample);
+        }
+    }
 }
