@@ -91,4 +91,25 @@ mod tests {
             print!("{}, ", sample);
         }
     }
+
+    #[test]
+    fn test_random_choice_in_place_2() {
+        struct Foo {j: i32, };
+        let test1 = Foo {j: 1};
+        let test2 = Foo {j: 2};
+        let test3 = Foo {j: 3}; 
+        let mut samples: Vec<&Foo> = Vec::new();
+        
+        samples.push(&test1);
+        samples.push(&test2);
+        samples.push(&test3);
+        
+        let weights: Vec<f64> = vec![1.0, 1.0, 1.0];
+
+        super::random_choice_in_place(&mut samples, &weights);
+
+        for sample in samples {
+            print!("foo{}, ", sample.j);
+        }
+    }
 }
