@@ -7,62 +7,65 @@ extern crate rand;
 
 use self::rand::{thread_rng, Rng};
 
-/// Chooses n samples by their weights. The greater their weights the more likely they get chosen.
-///
-/// @invariant sum of weights must not overflow.
-/// @param samples The to be selected samples
-/// @param weights Weights that get chosen by their weight/probability. One weight can be greater 1.
-/// @param n Number of randomly chosen samples by weight.
-/// @return randomly selected samples by their weights
-pub fn random_choice<'a, T>(samples: &'a Vec<T>, weights: &Vec<f64>, n: usize) -> Vec<&'a T>{
-    // TODO Check, if weight.len() > 0 and n > 0
+pub struct RandomChoice;
 
-    let sum:f64 = weights.iter().fold(0.0, |acc, &i| acc + i);
-    let spoke_gap: f64 = sum / n as f64;
+impl RandomChoice {
+    /// Chooses n samples by their weights. The greater their weights the more likely they get chosen.
+    ///
+    /// @invariant sum of weights must not overflow.
+    /// @param samples The to be selected samples
+    /// @param weights Weights that get chosen by their weight/probability. One weight can be greater 1.
+    /// @param n Number of randomly chosen samples by weight.
+    /// @return randomly selected samples by their weights
+    pub fn random_choice<'a, T>(samples: &'a Vec<T>, weights: &Vec<f64>, n: usize) -> Vec<&'a T>{
+        // TODO Check, if weight.len() > 0 and n > 0
 
-    // next_f64() ∈ [0.0, 1.0)
-    let spin = thread_rng().next_f64() * spoke_gap;
-    
-    let mut i: usize = 0;
-    let mut accumulated_weights = weights[0];
-    let mut choices: Vec<&T> = Vec::with_capacity(n);
-    let mut current_spoke: f64 = spin;
+        let sum:f64 = weights.iter().fold(0.0, |acc, &i| acc + i);
+        let spoke_gap: f64 = sum / n as f64;
 
-    for _ in 0 .. n {
-        while accumulated_weights < current_spoke {
-            i += 1;
-            accumulated_weights += weights[i];
+        // next_f64() ∈ [0.0, 1.0)
+        let spin = thread_rng().next_f64() * spoke_gap;
+        
+        let mut i: usize = 0;
+        let mut accumulated_weights = weights[0];
+        let mut choices: Vec<&T> = Vec::with_capacity(n);
+        let mut current_spoke: f64 = spin;
+
+        for _ in 0 .. n {
+            while accumulated_weights < current_spoke {
+                i += 1;
+                accumulated_weights += weights[i];
+            }
+            choices.push(&samples[i]);
+            current_spoke += spoke_gap;
         }
-        choices.push(&samples[i]);
-        current_spoke += spoke_gap;
+
+        choices
     }
 
-    choices
-}
+    pub fn random_choice_in_place<T: Copy>(samples: &mut Vec<T>, weights: &Vec<f64>) {
+        // TODO Check, if weight.len() > 0 and n > 0
+        let sum:f64 = weights.iter().fold(0.0, |acc, &i| acc + i);
+        let n: usize = weights.len();
+        let spoke_gap: f64 = sum / n as f64;
 
-pub fn random_choice_in_place<T: Copy>(samples: &mut Vec<T>, weights: &Vec<f64>) {
-    // TODO Check, if weight.len() > 0 and n > 0
-    let sum:f64 = weights.iter().fold(0.0, |acc, &i| acc + i);
-    let n: usize = weights.len();
-    let spoke_gap: f64 = sum / n as f64;
+        // next_f64() ∈ [0.0, 1.0)
+        let spin = thread_rng().next_f64() * spoke_gap;
+        
+        let mut j: usize = 0;
+        let mut accumulated_weights = weights[0];
+        let mut current_spoke: f64 = spin;
 
-    // next_f64() ∈ [0.0, 1.0)
-    let spin = thread_rng().next_f64() * spoke_gap;
-    
-    let mut j: usize = 0;
-    let mut accumulated_weights = weights[0];
-    let mut current_spoke: f64 = spin;
-
-    for i in 0 .. n {
-        while accumulated_weights < current_spoke {
-            j += 1;
-            accumulated_weights += weights[j];
+        for i in 0 .. n {
+            while accumulated_weights < current_spoke {
+                j += 1;
+                accumulated_weights += weights[j];
+            }
+            samples[i] = samples[j];
+            current_spoke += spoke_gap;
         }
-        samples[i] = samples[j];
-        current_spoke += spoke_gap;
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -73,7 +76,7 @@ mod tests {
 
         //assert_eq!(6.0, sum);
 
-        let choices = super::random_choice(&test_vec, &test_vec, 4 as usize);
+        let choices = super::RandomChoice::random_choice(&test_vec, &test_vec, 4 as usize);
 
         for choice in choices {
             print!("{}, ", choice);
@@ -85,7 +88,7 @@ mod tests {
         let mut samples = vec!["hi", "this", "is", "a", "test!"];
         let weights: Vec<f64> = vec![1.0, 1.0, 1.0, 1.0, 1.0];
 
-        super::random_choice_in_place(&mut samples, &weights);
+        super::RandomChoice::random_choice_in_place(&mut samples, &weights);
 
         for sample in samples {
             print!("{}, ", sample);
@@ -106,7 +109,7 @@ mod tests {
         
         let weights: Vec<f64> = vec![1.0, 1.0, 1.0];
 
-        super::random_choice_in_place(&mut samples, &weights);
+        super::RandomChoice::random_choice_in_place(&mut samples, &weights);
 
         for sample in samples {
             print!("foo{}, ", sample.j);
