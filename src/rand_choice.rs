@@ -9,6 +9,7 @@ use self::rand::{thread_rng, Rng};
 
 pub struct RandomChoice;
 
+
 impl RandomChoice {
     /// Chooses n samples by their weights. The greater their weights the more likely they get chosen.
     ///
@@ -17,7 +18,7 @@ impl RandomChoice {
     /// @param weights Weights that get chosen by their weight/probability. One weight can be greater 1.
     /// @param n Number of randomly chosen samples by weight.
     /// @return randomly selected samples by their weights
-    pub fn random_choice<'a, T>(samples: &'a Vec<T>, weights: &Vec<f64>, n: usize) -> Vec<&'a T>{
+    pub fn random_choice<'a, T>(samples: &'a [T], weights: &[f64], n: usize) -> Vec<&'a T> {
         // TODO Check, if weight.len() > 0 and n > 0
 
         let sum:f64 = weights.iter().fold(0.0, |acc, &i| acc + i);
@@ -43,7 +44,7 @@ impl RandomChoice {
         choices
     }
 
-    pub fn random_choice_in_place<T: Copy>(samples: &mut Vec<T>, weights: &Vec<f64>) {
+    pub fn random_choice_in_place<T: Clone>(samples: &mut [T], weights: &[f64]) {
         // TODO Check, if weight.len() > 0 and n > 0
         let sum:f64 = weights.iter().fold(0.0, |acc, &i| acc + i);
         let n: usize = weights.len();
@@ -61,7 +62,7 @@ impl RandomChoice {
                 j += 1;
                 accumulated_weights += weights[j];
             }
-            samples[i] = samples[j];
+            samples[i] = samples[j].clone();
             current_spoke += spoke_gap;
         }
     }
