@@ -18,7 +18,7 @@ impl RandomChoice {
     /// @param weights Weights that get chosen by their weight/probability. One weight can be greater 1.
     /// @param n Number of randomly chosen samples by weight.
     /// @return randomly selected samples by their weights
-    pub fn random_choice<'a, T>(samples: &'a [T], weights: &[f64], n: usize) -> Vec<&'a T> {
+    pub fn random_choice_f64<'a, T>(samples: &'a [T], weights: &[f64], n: usize) -> Vec<&'a T> {
         if weights.len() == 0 || n == 0 { return Vec::new(); }
 
         let sum:f64 = weights.iter().fold(0.0, |acc, &i| acc + i);
@@ -49,7 +49,7 @@ impl RandomChoice {
     /// @invariant sum of weights must not overflow.
     /// @param samples The to be selected samples
     /// @param weights Weights that get chosen by their weight/probability. One weight can be greater 1.
-    pub fn random_choice_in_place<T: Clone>(samples: &mut [T], weights: &[f64]) {
+    pub fn random_choice_in_place_f64<T: Clone>(samples: &mut [T], weights: &[f64]) {
         if weights.len() < 2 { return; }
 
         let sum:f64 = weights.iter().fold(0.0, |acc, &i| acc + i);
@@ -83,7 +83,7 @@ mod tests {
 
         //assert_eq!(6.0, sum);
 
-        let choices = super::RandomChoice::random_choice(&test_vec, &test_vec, 4 as usize);
+        let choices = super::RandomChoice::random_choice_f64(&test_vec, &test_vec, 4 as usize);
 
         for choice in choices {
             print!("{}, ", choice);
@@ -95,7 +95,7 @@ mod tests {
         let mut samples = vec!["hi", "this", "is", "a", "test!"];
         let weights: Vec<f64> = vec![1.0, 1.0, 1.0, 1.0, 1.0];
 
-        super::RandomChoice::random_choice_in_place(&mut samples, &weights);
+        super::RandomChoice::random_choice_in_place_f64(&mut samples, &weights);
 
         for sample in samples {
             print!("{}, ", sample);
@@ -116,7 +116,7 @@ mod tests {
         
         let weights: Vec<f64> = vec![1.0, 1.0, 1.0];
 
-        super::RandomChoice::random_choice_in_place(&mut samples, &weights);
+        super::RandomChoice::random_choice_in_place_f64(&mut samples, &weights);
 
         for sample in samples {
             print!("foo{}, ", sample.j);
