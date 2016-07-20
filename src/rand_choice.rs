@@ -12,7 +12,7 @@ use self::rand::{thread_rng, Rng};
 /// @invariant sum of weights must not overflow.
 /// @param samples The to be selected samples
 /// @param weights Weights that get chosen by their weight/probability. One weight can be greater 1.
-/// @param n Number of randomly chosen indices by weight.
+/// @param n Number of randomly chosen samples by weight.
 /// @return randomly selected samples by their weights
 pub fn random_choice<'a, T>(samples: &'a Vec<T>, weights: &Vec<f64>, n: usize) -> Vec<&'a T>{
     // TODO Check, if weight.len() > 0 and n > 0
