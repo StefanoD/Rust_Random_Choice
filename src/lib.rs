@@ -44,6 +44,11 @@ impl RandomChoice {
         choices
     }
 
+    /// Chooses n samples by their weights. The greater their weights the more likely they get chosen.
+    /// The result gets saved directly in the samples argument.
+    /// @invariant sum of weights must not overflow.
+    /// @param samples The to be selected samples
+    /// @param weights Weights that get chosen by their weight/probability. One weight can be greater 1.
     pub fn random_choice_in_place<T: Clone>(samples: &mut [T], weights: &[f64]) {
         if weights.len() < 2 { return; }
 
