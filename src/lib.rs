@@ -1,3 +1,5 @@
+#![cfg_attr(test, feature(test))]
+
 /// Implementation of Stochastic universal sampling
 /// https://en.wikipedia.org/wiki/Stochastic_universal_sampling
 /// Runtime: O(n)
@@ -132,16 +134,100 @@ impl RandomChoice {
     }
 }
 
+
+#[cfg(test)]
+mod benches {
+    
+    extern crate test;
+    use self::test::Bencher;
+
+    #[bench]
+    fn bench_random_choice_64(b: &mut Bencher) {
+        let capacity: usize = 500;
+        let mut samples: Vec<f64> = Vec::with_capacity(capacity);
+        let mut weights: Vec<f64> = Vec::with_capacity(capacity);
+
+        for i in 0..capacity {
+            samples.push((i + 1usize) as f64);
+            weights.push((i + 1usize) as f64);
+        }
+        b.iter(|| {
+            super::RandomChoice::random_choice_f64(&samples, &weights, 1200 as usize);
+        });
+    }
+
+    #[bench]
+    fn bench_random_choice_in_place_64(b: &mut Bencher) {
+        let capacity: usize = 500;
+        let mut samples: Vec<f64> = Vec::with_capacity(capacity);
+        let mut weights: Vec<f64> = Vec::with_capacity(capacity);
+
+        for i in 0..capacity {
+            samples.push((i + 1usize) as f64);
+            weights.push((i + 1usize) as f64);
+        }
+        b.iter(|| {
+            super::RandomChoice::random_choice_in_place_f64(&mut samples, &weights);
+        });
+    }
+
+    #[bench]
+    fn bench_random_choice_32(b: &mut Bencher) {
+        let capacity: usize = 500;
+        let mut samples: Vec<f32> = Vec::with_capacity(capacity);
+        let mut weights: Vec<f32> = Vec::with_capacity(capacity);
+
+        for i in 0..capacity {
+            samples.push((i + 1usize) as f32);
+            weights.push((i + 1usize) as f32);
+        }
+        b.iter(|| {
+            super::RandomChoice::random_choice_f32(&samples, &weights, 1200 as usize);
+        });
+    }
+
+    #[bench]
+    fn bench_random_choice_in_place_32(b: &mut Bencher) {
+        let capacity: usize = 500;
+        let mut samples: Vec<f32> = Vec::with_capacity(capacity);
+        let mut weights: Vec<f32> = Vec::with_capacity(capacity);
+
+        for i in 0..capacity {
+            samples.push((i + 1usize) as f32);
+            weights.push((i + 1usize) as f32);
+        }
+        b.iter(|| {
+            super::RandomChoice::random_choice_in_place_f32(&mut samples, &weights);
+        });
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
+
     #[test]
     fn test_random_choice_64() {
-        let test_vec: Vec<f64> = vec![3.1, 1.2, 1.3, 2.0];
+        let capacity: usize = 1000;
+        let mut samples: Vec<usize> = Vec::with_capacity(capacity);
+        let mut weights: Vec<f64> = Vec::with_capacity(capacity);
 
-        let choices = super::RandomChoice::random_choice_f64(&test_vec, &test_vec, 4 as usize);
+        for i in 0..capacity {
+            samples.push(i + 1);
+            weights.push((i + 1usize) as f64);
+        }
+
+        let choices = super::RandomChoice::random_choice_f64(&samples, &weights, 4 as usize);
+
+        let mut weight_counter = HashMap::with_capacity(capacity);
 
         for choice in choices {
-            print!("{}, ", choice);
+            let counter = weight_counter.entry(choice).or_insert(0);
+            *counter += 1;
+        }
+
+        for key in weight_counter.keys() {
+            println!("{}", key);
         }
     }
 
