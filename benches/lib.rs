@@ -4,9 +4,8 @@ extern crate random_choice;
 extern crate test;
 
 
-
 #[cfg(test)]
-mod benches {    
+mod benches {
     use test::Bencher;
     use random_choice::RandomChoice;
 
