@@ -1,5 +1,3 @@
-#![cfg_attr(test, feature(test))]
-
 /// Implementation of Stochastic universal sampling
 /// https://en.wikipedia.org/wiki/Stochastic_universal_sampling
 /// Runtime: O(n)
@@ -134,73 +132,6 @@ impl RandomChoice {
     }
 }
 
-
-#[cfg(test)]
-mod benches {
-    
-    extern crate test;
-    use self::test::Bencher;
-
-    #[bench]
-    fn bench_random_choice_64(b: &mut Bencher) {
-        let capacity: usize = 500;
-        let mut samples: Vec<f64> = Vec::with_capacity(capacity);
-        let mut weights: Vec<f64> = Vec::with_capacity(capacity);
-
-        for i in 0..capacity {
-            samples.push((i + 1usize) as f64);
-            weights.push((i + 1usize) as f64);
-        }
-        b.iter(|| {
-            super::RandomChoice::random_choice_f64(&samples, &weights, 1200 as usize);
-        });
-    }
-
-    #[bench]
-    fn bench_random_choice_in_place_64(b: &mut Bencher) {
-        let capacity: usize = 500;
-        let mut samples: Vec<f64> = Vec::with_capacity(capacity);
-        let mut weights: Vec<f64> = Vec::with_capacity(capacity);
-
-        for i in 0..capacity {
-            samples.push((i + 1usize) as f64);
-            weights.push((i + 1usize) as f64);
-        }
-        b.iter(|| {
-            super::RandomChoice::random_choice_in_place_f64(&mut samples, &weights);
-        });
-    }
-
-    #[bench]
-    fn bench_random_choice_32(b: &mut Bencher) {
-        let capacity: usize = 500;
-        let mut samples: Vec<f32> = Vec::with_capacity(capacity);
-        let mut weights: Vec<f32> = Vec::with_capacity(capacity);
-
-        for i in 0..capacity {
-            samples.push((i + 1usize) as f32);
-            weights.push((i + 1usize) as f32);
-        }
-        b.iter(|| {
-            super::RandomChoice::random_choice_f32(&samples, &weights, 1200 as usize);
-        });
-    }
-
-    #[bench]
-    fn bench_random_choice_in_place_32(b: &mut Bencher) {
-        let capacity: usize = 500;
-        let mut samples: Vec<f32> = Vec::with_capacity(capacity);
-        let mut weights: Vec<f32> = Vec::with_capacity(capacity);
-
-        for i in 0..capacity {
-            samples.push((i + 1usize) as f32);
-            weights.push((i + 1usize) as f32);
-        }
-        b.iter(|| {
-            super::RandomChoice::random_choice_in_place_f32(&mut samples, &weights);
-        });
-    }
-}
 
 #[cfg(test)]
 mod tests {
