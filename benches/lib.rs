@@ -10,7 +10,7 @@ mod benches {
     use random_choice::RandomChoice;
 
     #[bench]
-    fn bench_random_choice_64(b: &mut Bencher) {
+    fn bench_random_choice_500_it_f64(b: &mut Bencher) {
         let capacity: usize = 500;
         let mut samples: Vec<f64> = Vec::with_capacity(capacity);
         let mut weights: Vec<f64> = Vec::with_capacity(capacity);
@@ -20,12 +20,12 @@ mod benches {
             weights.push((i + 1usize) as f64);
         }
         b.iter(|| {
-            RandomChoice::random_choice_f64(&samples, &weights, 1200 as usize);
+            RandomChoice::random_choice_f64(&samples, &weights, 500 as usize);
         });
     }
 
     #[bench]
-    fn bench_random_choice_in_place_64(b: &mut Bencher) {
+    fn bench_random_choice_in_place_500_it_f64(b: &mut Bencher) {
         let capacity: usize = 500;
         let mut samples: Vec<f64> = Vec::with_capacity(capacity);
         let mut weights: Vec<f64> = Vec::with_capacity(capacity);
@@ -40,7 +40,7 @@ mod benches {
     }
 
     #[bench]
-    fn bench_random_choice_32(b: &mut Bencher) {
+    fn bench_random_choice_500_it_f32(b: &mut Bencher) {
         let capacity: usize = 500;
         let mut samples: Vec<f32> = Vec::with_capacity(capacity);
         let mut weights: Vec<f32> = Vec::with_capacity(capacity);
@@ -50,12 +50,12 @@ mod benches {
             weights.push((i + 1usize) as f32);
         }
         b.iter(|| {
-            RandomChoice::random_choice_f32(&samples, &weights, 1200 as usize);
+            RandomChoice::random_choice_f32(&samples, &weights, 500 as usize);
         });
     }
 
     #[bench]
-    fn bench_random_choice_in_place_32(b: &mut Bencher) {
+    fn bench_random_choice_in_place_500_it_f32(b: &mut Bencher) {
         let capacity: usize = 500;
         let mut samples: Vec<f32> = Vec::with_capacity(capacity);
         let mut weights: Vec<f32> = Vec::with_capacity(capacity);
