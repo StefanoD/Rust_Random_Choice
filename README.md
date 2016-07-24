@@ -18,6 +18,15 @@ This algorithm is based on the stochastic universal sampling algorithm.
 - **Evolutionary algorithms**: Choose the _n_ fittest populations by their fitness **_fi_**
 - **Monte Carlo Localization**: Resampling of _n_ particles by their weight **_w_**
 
+## Usage
+
+Add this to your `Cargo.toml`:
+
+```toml
+[dependencies]
+random_choice = "0.1"
+```
+
 ## Examples
 ### In Place Variant
 ```rust
