@@ -6,6 +6,7 @@ description = "Chooses samples randomly by their weights/probabilities."
 repository = "https://github.com/StefanoD/Rust_Random_Choice"
 keywords = ["random choice"]
 license = "Apache License, Version 2.0"
+doc = true
 
 [dependencies]
 rand = "0.3"
