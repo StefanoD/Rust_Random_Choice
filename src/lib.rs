@@ -85,7 +85,7 @@ impl RandomChoice {
         let sum: f32 = weights.iter().fold(0.0, |acc, &i| acc + i);
         let spoke_gap: f32 = sum / n as f32;
 
-        // next_f32() ∈ [0.0, 1.0)
+        // next_f64() ∈ [0.0, 1.0)
         let spin = thread_rng().next_f32() * spoke_gap;
 
         let mut i: usize = 0;
@@ -93,8 +93,11 @@ impl RandomChoice {
         let mut choices: Vec<&T> = Vec::with_capacity(n);
         let mut current_spoke: f32 = spin;
 
-        for _ in 0..n {
+        //println!("sum: {}, gap: {}", sum, spoke_gap);
+
+        for j in 0..n {
             while accumulated_weights < current_spoke {
+                //println!("accumulated_weights: {}, current_spoke: {}, spoke number: {}, i: {}", accumulated_weights, current_spoke, j, i);
                 i += 1;
                 accumulated_weights += weights[i];
             }
@@ -104,6 +107,43 @@ impl RandomChoice {
 
         choices
     }
+
+    /*pub fn random_choice_f32<'a, T>(samples: &'a [T], weights: &[f32], n: usize) -> Vec<&'a T> {
+        if weights.len() == 0 || n == 0 {
+            return Vec::new();
+        }
+
+        let sum: f32 = weights.iter().fold(0.0, |acc, &i| acc + i);
+        let spoke_gap: f32 = sum / n as f32;
+
+        // next_f32() ∈ [0.0, 1.0)
+        let spin = thread_rng().next_f32() * spoke_gap;
+
+        let mut i: usize = 0;
+        let mut interval_begin: f32 = 0.0;
+        let mut interval_end = weights[0];
+        let mut choices: Vec<&T> = Vec::with_capacity(n);
+        let mut current_spoke: f32 = spin;
+
+        for j in 0..n {
+            current_spoke %= sum;
+
+            while interval_end < current_spoke || interval_begin > current_spoke {
+                i += 1;
+                i %= weights.len();
+                println!("interval_begin: {}, interval_end: {}, current_spoke: {}, spoke number: {}, i: {}",
+                interval_begin, interval_end, current_spoke, j, i);
+                println!("sum: {}, gap: {}", sum, spoke_gap);
+                interval_end += weights[i];
+                interval_end %= sum;
+                interval_begin = interval_end - weights[i];
+            }
+            choices.push(&samples[i]);
+            current_spoke += spoke_gap;
+        }
+
+        choices
+    }*/
 
     pub fn random_choice_in_place_f32<T: Clone>(samples: &mut [T], weights: &[f32]) {
         if weights.len() < 2 {
