@@ -1,3 +1,6 @@
+// Licensed under the Apache License, Version 2.0
+// <http://www.apache.org/licenses/LICENSE-2.0>
+
 //! # Rust Random Choice
 //! This is an implementation of the stochastic universal sampling algorithm:
 //! https://en.wikipedia.org/wiki/Stochastic_universal_sampling
