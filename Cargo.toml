@@ -10,6 +10,7 @@ license = "Apache License, Version 2.0"
 [lib]
 doc = true
 test = true
+bench = true
 
 [dependencies]
 rand = "0.3"
