@@ -39,7 +39,7 @@ mod tests {
 
     #[test]
     fn test_random_choice_f32() {
-        let capacity: usize = 1000;
+        let capacity: usize = 500;
         let mut samples: Vec<usize> = Vec::with_capacity(capacity);
         let mut weights: Vec<f32> = Vec::with_capacity(capacity);
 
