@@ -1,3 +1,5 @@
+![](https://travis-ci.org/StefanoD/Rust_Random_Choice.svg?branch=master)
+
 # Rust Random Choice
 Chooses samples randomly by their weights/probabilities.
 
