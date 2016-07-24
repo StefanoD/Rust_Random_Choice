@@ -1,4 +1,6 @@
 ![](https://travis-ci.org/StefanoD/Rust_Random_Choice.svg?branch=master)
+![](https://img.shields.io/crates/v/random_choice.svg)
+![](https://img.shields.io/crates/l/random_choice.svg)
 
 # Rust Random Choice
 Chooses samples randomly by their weights/probabilities.
