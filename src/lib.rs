@@ -125,8 +125,8 @@ impl RandomChoice {
         let mut current_spoke: f64 = spin;
 
         for i in 0..n {
-            // add condition i < weights.len(), because float leads to inaccurate
-            // calculations which can lead to i >= weights.len() 
+            // add condition j < weights.len(), because float leads to inaccurate
+            // calculations which can lead to j >= weights.len() 
             while j < weights.len() && accumulated_weights < current_spoke {
                 j += 1;
                 accumulated_weights += weights[j];
@@ -183,8 +183,8 @@ impl RandomChoice {
         let mut current_spoke: f64 = spin;
 
         for i in 0..n {
-            // add condition i < weights.len(), because float leads to inaccurate
-            // calculations which can lead to i >= weights.len() 
+            // add condition j < weights.len(), because float leads to inaccurate
+            // calculations which can lead to j >= weights.len() 
             while j < weights.len() && accumulated_weights < current_spoke {
                 j += 1;
                 accumulated_weights += weights[j] as f64;
