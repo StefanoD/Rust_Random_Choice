@@ -97,4 +97,16 @@ mod tests {
         }
     }
 
+    #[test]
+    fn test_random_choice_in_place_f32() {
+        let mut samples = vec!["hi", "this", "is", "a", "test!"];
+        let weights: Vec<f32> = vec![1.0, 1.0, 1.0, 1.0, 1.0];
+
+        RandomChoice::random_choice_in_place_f32(&mut samples, &weights);
+
+        for sample in samples {
+            print!("{}, ", sample);
+        }
+    }
+
 }
