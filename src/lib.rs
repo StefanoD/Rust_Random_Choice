@@ -93,11 +93,11 @@ impl RandomChoice {
         let mut choices: Vec<&T> = Vec::with_capacity(n);
         let mut current_spoke: f32 = spin;
 
-        //println!("sum: {}, gap: {}", sum, spoke_gap);
+        println!("sum: {}, gap: {}", sum, spoke_gap);
 
         for j in 0..n {
             while accumulated_weights < current_spoke {
-                //println!("accumulated_weights: {}, current_spoke: {}, spoke number: {}, i: {}", accumulated_weights, current_spoke, j, i);
+                println!("accumulated_weights: {}, current_spoke: {}, spoke number: {}, i: {}", accumulated_weights, current_spoke, j, i);
                 i += 1;
                 accumulated_weights += weights[i];
             }
