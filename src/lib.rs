@@ -35,7 +35,7 @@ impl RandomChoice {
         let mut current_spoke: f64 = spin;
 
         for _ in 0..n {
-            while accumulated_weights < current_spoke {
+            while i < weights.len() && accumulated_weights < current_spoke {
                 i += 1;
                 accumulated_weights += weights[i];
             }
@@ -68,7 +68,7 @@ impl RandomChoice {
         let mut current_spoke: f64 = spin;
 
         for i in 0..n {
-            while accumulated_weights < current_spoke {
+            while j < weights.len() && accumulated_weights < current_spoke {
                 j += 1;
                 accumulated_weights += weights[j];
             }
@@ -82,24 +82,23 @@ impl RandomChoice {
             return Vec::new();
         }
 
-        let sum: f32 = weights.iter().fold(0.0, |acc, &i| acc + i);
-        let spoke_gap: f32 = sum / n as f32;
+        let sum: f64 = weights.iter().fold(0.0, |acc, &i| acc + i as f64);
+        let spoke_gap: f64 = sum / n as f64;
 
         // next_f64() ∈ [0.0, 1.0)
-        let spin = thread_rng().next_f32() * spoke_gap;
+        let spin = thread_rng().next_f64() * spoke_gap;
 
         let mut i: usize = 0;
-        let mut accumulated_weights = weights[0];
+        let mut accumulated_weights = weights[0] as f64;
         let mut choices: Vec<&T> = Vec::with_capacity(n);
-        let mut current_spoke: f32 = spin;
+        let mut current_spoke: f64 = spin;
 
-        println!("sum: {}, gap: {}", sum, spoke_gap);
-
-        for j in 0..n {
-            while accumulated_weights < current_spoke {
-                println!("accumulated_weights: {}, current_spoke: {}, spoke number: {}, i: {}", accumulated_weights, current_spoke, j, i);
+        for _ in 0..n {
+            // add condition i < weights.len(), because float leads to inaccurate
+            // calculations which can lead to i >= weights.len() 
+            while i < weights.len() && accumulated_weights < current_spoke {
                 i += 1;
-                accumulated_weights += weights[i];
+                accumulated_weights += weights[i] as f64;
             }
             choices.push(&samples[i]);
             current_spoke += spoke_gap;
@@ -108,63 +107,26 @@ impl RandomChoice {
         choices
     }
 
-    /*pub fn random_choice_f32<'a, T>(samples: &'a [T], weights: &[f32], n: usize) -> Vec<&'a T> {
-        if weights.len() == 0 || n == 0 {
-            return Vec::new();
-        }
-
-        let sum: f32 = weights.iter().fold(0.0, |acc, &i| acc + i);
-        let spoke_gap: f32 = sum / n as f32;
-
-        // next_f32() ∈ [0.0, 1.0)
-        let spin = thread_rng().next_f32() * spoke_gap;
-
-        let mut i: usize = 0;
-        let mut interval_begin: f32 = 0.0;
-        let mut interval_end = weights[0];
-        let mut choices: Vec<&T> = Vec::with_capacity(n);
-        let mut current_spoke: f32 = spin;
-
-        for j in 0..n {
-            current_spoke %= sum;
-
-            while interval_end < current_spoke || interval_begin > current_spoke {
-                i += 1;
-                i %= weights.len();
-                println!("interval_begin: {}, interval_end: {}, current_spoke: {}, spoke number: {}, i: {}",
-                interval_begin, interval_end, current_spoke, j, i);
-                println!("sum: {}, gap: {}", sum, spoke_gap);
-                interval_end += weights[i];
-                interval_end %= sum;
-                interval_begin = interval_end - weights[i];
-            }
-            choices.push(&samples[i]);
-            current_spoke += spoke_gap;
-        }
-
-        choices
-    }*/
-
     pub fn random_choice_in_place_f32<T: Clone>(samples: &mut [T], weights: &[f32]) {
         if weights.len() < 2 {
             return;
         }
 
-        let sum: f32 = weights.iter().fold(0.0, |acc, &i| acc + i);
+        let sum: f64 = weights.iter().fold(0.0, |acc, &i| acc + i as f64);
         let n: usize = weights.len();
-        let spoke_gap: f32 = sum / n as f32;
+        let spoke_gap: f64 = sum / n as f64;
 
-        // next_f32() ∈ [0.0, 1.0)
-        let spin = thread_rng().next_f32() * spoke_gap;
+        // next_f64() ∈ [0.0, 1.0)
+        let spin = thread_rng().next_f64() * spoke_gap;
 
         let mut j: usize = 0;
-        let mut accumulated_weights = weights[0];
-        let mut current_spoke: f32 = spin;
+        let mut accumulated_weights = weights[0] as f64;
+        let mut current_spoke: f64 = spin;
 
         for i in 0..n {
-            while accumulated_weights < current_spoke {
+            while j < weights.len() && accumulated_weights < current_spoke {
                 j += 1;
-                accumulated_weights += weights[j];
+                accumulated_weights += weights[j] as f64;
             }
             samples[i] = samples[j].clone();
             current_spoke += spoke_gap;
