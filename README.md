@@ -24,7 +24,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-random_choice = "0.1"
+random_choice = "*"
 ```
 
 ## Examples
