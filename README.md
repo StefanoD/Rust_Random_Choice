@@ -31,12 +31,12 @@ random_choice = "*"
 ### In Place Variant
 ```rust
 extern crate random_choice;
-use self::random_choice::RandomChoice;
+use self::random_choice::random_choice;
 
 let mut samples = vec!["hi", "this", "is", "a", "test!"];
 let weights: Vec<f64> = vec![5.6, 7.8, 9.7, 1.1, 2.0];
 
-RandomChoice::random_choice_in_place_f64(&mut samples, &weights);
+random_choice().random_choice_in_place_f64(&mut samples, &weights);
  
 for sample in samples {
     print!("{}, ", sample);
@@ -45,13 +45,13 @@ for sample in samples {
 ### N Selection Variant
 ```rust
 extern crate random_choice;
-use self::random_choice::RandomChoice;
+use self::random_choice::random_choice;
 
 let mut samples = vec!["hi", "this", "is", "a", "test!"];
 let weights: Vec<f64> = vec![5.6, 7.8, 9.7, 1.1, 2.0];
 
 let number_choices = 100;
-let choices = RandomChoice::random_choice_f64(&samples, &weights, number_choices);
+let choices = random_choice().random_choice_f64(&samples, &weights, number_choices);
 
 for choice in choices {
     print!("{}, ", choice);
