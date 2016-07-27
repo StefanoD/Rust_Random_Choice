@@ -1,6 +1,6 @@
 [package]
 name = "random_choice"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["Stefano Di Martino <stefano.d@posteo.de>"]
 description = "Chooses samples randomly by their weights/probabilities."
 repository = "https://github.com/StefanoD/Rust_Random_Choice"
