@@ -7,7 +7,7 @@ extern crate test;
 #[cfg(test)]
 mod benches {
     use test::Bencher;
-    use random_choice::RandomChoice;
+    use random_choice::random_choice;
 
     #[bench]
     fn bench_random_choice_1000_it_f64(b: &mut Bencher) {
@@ -20,7 +20,7 @@ mod benches {
             weights.push((i + 1usize) as f64);
         }
         b.iter(|| {
-            RandomChoice::random_choice_f64(&samples, &weights, capacity);
+            random_choice().random_choice_f64(&samples, &weights, capacity);
         });
     }
 
@@ -35,7 +35,7 @@ mod benches {
             weights.push((i + 1usize) as f64);
         }
         b.iter(|| {
-            RandomChoice::random_choice_in_place_f64(&mut samples, &weights);
+            random_choice().random_choice_in_place_f64(&mut samples, &weights);
         });
     }
 
@@ -50,7 +50,7 @@ mod benches {
             weights.push((i + 1usize) as f64);
         }
         b.iter(|| {
-            RandomChoice::random_choice_f64(&samples, &weights, capacity);
+            random_choice().random_choice_f64(&samples, &weights, capacity);
         });
     }
 
@@ -65,7 +65,7 @@ mod benches {
             weights.push((i + 1usize) as f64);
         }
         b.iter(|| {
-            RandomChoice::random_choice_in_place_f64(&mut samples, &weights);
+            random_choice().random_choice_in_place_f64(&mut samples, &weights);
         });
     }
 
@@ -80,7 +80,7 @@ mod benches {
             weights.push((i + 1usize) as f32);
         }
         b.iter(|| {
-            RandomChoice::random_choice_f32(&samples, &weights, capacity);
+            random_choice().random_choice_f32(&samples, &weights, capacity);
         });
     }
 
@@ -95,7 +95,7 @@ mod benches {
             weights.push((i + 1usize) as f32);
         }
         b.iter(|| {
-            RandomChoice::random_choice_f32(&samples, &weights, capacity);
+            random_choice().random_choice_f32(&samples, &weights, capacity);
         });
     }
 
@@ -110,7 +110,7 @@ mod benches {
             weights.push((i + 1usize) as f32);
         }
         b.iter(|| {
-            RandomChoice::random_choice_in_place_f32(&mut samples, &weights);
+            random_choice().random_choice_in_place_f32(&mut samples, &weights);
         });
     }
 
@@ -125,7 +125,7 @@ mod benches {
             weights.push((i + 1usize) as f32);
         }
         b.iter(|| {
-            RandomChoice::random_choice_in_place_f32(&mut samples, &weights);
+            random_choice().random_choice_in_place_f32(&mut samples, &weights);
         });
     }
 }
