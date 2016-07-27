@@ -136,7 +136,7 @@ impl<RNG: Rng> RandomChoice<RNG> {
         }
 
         // add this condition, because float leads to inaccurate
-        // calculations which can lead to i >= weights.len()
+        // calculations which can miss some samples
         while choices.len() < weights.len() {
             choices.push(&samples[i]);
         }
@@ -177,7 +177,7 @@ impl<RNG: Rng> RandomChoice<RNG> {
         }
 
         // add this condition, because float leads to inaccurate
-        // calculations which can lead to i >= weights.len()
+        // calculations which can miss some samples
         while i < weights.len() {
             samples[i] = samples[j].clone();
             i += 1
@@ -215,7 +215,7 @@ impl<RNG: Rng> RandomChoice<RNG> {
         }
 
         // add this condition, because float leads to inaccurate
-        // calculations which can lead to i >= weights.len()
+        // calculations which can miss some samples
         while choices.len() < weights.len() {
             choices.push(&samples[i]);
         }
@@ -251,7 +251,7 @@ impl<RNG: Rng> RandomChoice<RNG> {
         }
 
         // add this condition, because float leads to inaccurate
-        // calculations which can lead to i >= weights.len()
+        // calculations which can miss some samples
         while i < weights.len() {
             samples[i] = samples[j].clone();
             i += 1
