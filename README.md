@@ -61,7 +61,7 @@ fn main() {
     }
 }
 ```
-## With Custom Seed
+### With Custom Seed
 ```rust
 extern crate random_choice;
 extern crate rand;
