@@ -3,7 +3,7 @@ extern crate random_choice;
 #[cfg(test)]
 mod tests {
     use std::collections::BTreeMap;
-    use random_choice::RandomChoice;
+    use random_choice::random_choice;
 
     #[test]
     fn test_random_choice_f64() {
@@ -17,7 +17,7 @@ mod tests {
         }
 
         let number_choices = 10000;
-        let choices = RandomChoice::random_choice_f64(&samples, &weights, number_choices);
+        let choices = random_choice().random_choice_f64(&samples, &weights, number_choices);
 
         assert!(choices.len() == number_choices);
 
@@ -33,7 +33,7 @@ mod tests {
         for (_, value) in &weight_counter {
             assert!((last_value as i32 - (*value) as i32).abs() <= 2);
             last_value = *value;
-            //println!("({}, {})", key, value);
+            // println!("({}, {})", key, value);
         }
     }
 
@@ -49,7 +49,7 @@ mod tests {
         }
 
         let number_choices = 10000;
-        let choices = RandomChoice::random_choice_f32(&samples, &weights, number_choices);
+        let choices = random_choice().random_choice_f32(&samples, &weights, number_choices);
 
         assert!(choices.len() == number_choices);
 
@@ -65,7 +65,7 @@ mod tests {
         for (_, value) in &weight_counter {
             assert!((last_value as i32 - (*value) as i32).abs() <= 2);
             last_value = *value;
-            //println!("({}, {})", key, value);
+            // println!("({}, {})", key, value);
         }
     }
 
@@ -80,7 +80,7 @@ mod tests {
             weights.push((i + 1usize) as f64);
         }
 
-        let choices = RandomChoice::random_choice_f64(&samples, &weights, 0 as usize);
+        let choices = random_choice().random_choice_f64(&samples, &weights, 0 as usize);
 
         assert!(choices.len() == 0);
     }
@@ -90,7 +90,7 @@ mod tests {
         let mut samples = vec!["hi", "this", "is", "a", "test!"];
         let weights: Vec<f64> = vec![1.0, 1.0, 1.0, 1.0, 1.0];
 
-        RandomChoice::random_choice_in_place_f64(&mut samples, &weights);
+        random_choice().random_choice_in_place_f64(&mut samples, &weights);
 
         for sample in samples {
             print!("{}, ", sample);
@@ -102,7 +102,7 @@ mod tests {
         let mut samples = vec!["hi", "this", "is", "a", "test!"];
         let weights: Vec<f32> = vec![1.0, 1.0, 1.0, 1.0, 1.0];
 
-        RandomChoice::random_choice_in_place_f32(&mut samples, &weights);
+        random_choice().random_choice_in_place_f32(&mut samples, &weights);
 
         for sample in samples {
             print!("{}, ", sample);

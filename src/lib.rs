@@ -14,19 +14,19 @@
 //! ## Applications
 //! - **Evolutionary algorithms**: Choose the _n_ fittest populations by their fitness **_fi_**
 //! - **Monte Carlo Localization**: Resampling of _n_ particles by their weight **_w_**
-//! 
+//!
 //! # Examples
 //! ## In Place Variant
 //! ```
 //! extern crate random_choice;
-//! use self::random_choice::RandomChoice;
+//! use self::random_choice::random_choice;
 //!
 //! # fn main() {
 //! let mut samples = vec!["hi", "this", "is", "a", "test!"];
 //! let weights: Vec<f64> = vec![5.6, 7.8, 9.7, 1.1, 2.0];
 //!
-//! RandomChoice::random_choice_in_place_f64(&mut samples, &weights);
-//! 
+//! random_choice().random_choice_in_place_f64(&mut samples, &weights);
+//!
 //! for sample in samples {
 //!     print!("{}, ", sample);
 //! }
@@ -35,23 +35,23 @@
 //! ## N Selection Variant
 //! ```
 //! extern crate random_choice;
-//! use self::random_choice::RandomChoice;
+//! use self::random_choice::random_choice;
 //!
 //! # fn main() {
 //! let capacity: usize = 500;
 //! let mut samples: Vec<usize> = Vec::with_capacity(capacity);
 //! let mut weights: Vec<f64> = Vec::with_capacity(capacity);
-//! 
+//!
 //! for i in 0..capacity {
 //!     samples.push(i);
 //!     weights.push(i as f64);
 //! }
-//! 
+//!
 //! let number_choices = 10000;
-//! let choices = RandomChoice::random_choice_f64(&samples, &weights, number_choices);
-//! 
+//! let choices = random_choice().random_choice_f64(&samples, &weights, number_choices);
+//!
 //! assert!(choices.len() == number_choices);
-//! 
+//!
 //! for choice in choices {
 //!     print!("{}, ", choice);
 //! }
@@ -60,12 +60,25 @@
 
 extern crate rand;
 
-use self::rand::{thread_rng, Rng};
+use self::rand::{thread_rng, ThreadRng, Rng};
 
-pub struct RandomChoice;
+pub struct RandomChoice<RNG: Rng> {
+    rng: RNG,
+}
+
+/// Creates a new RandomChoice struct using the ThreadRng
+pub fn random_choice() -> RandomChoice<ThreadRng> {
+    RandomChoice::new(thread_rng())
+}
 
 
-impl RandomChoice {
+impl<RNG: Rng> RandomChoice<RNG> {
+    /// Creates a new RandomChoice struct.
+    /// @param rng the random number generator to use with this stuct.
+    pub fn new(rng: RNG) -> Self {
+        RandomChoice { rng: rng }
+    }
+
     /// Chooses n samples by their weights. The greater their weights the more likely they get chosen.
     ///
     /// @invariant sum of weights must not overflow.
@@ -73,7 +86,11 @@ impl RandomChoice {
     /// @param weights Weights that get chosen by their weight/probability. One weight can be greater 1.
     /// @param n Number of randomly chosen samples by weight.
     /// @return randomly selected samples by their weights
-    pub fn random_choice_f64<'a, T>(samples: &'a [T], weights: &[f64], n: usize) -> Vec<&'a T> {
+    pub fn random_choice_f64<'a, T>(&mut self,
+                                    samples: &'a [T],
+                                    weights: &[f64],
+                                    n: usize)
+                                    -> Vec<&'a T> {
         if weights.len() == 0 || n == 0 {
             return Vec::new();
         }
@@ -82,7 +99,7 @@ impl RandomChoice {
         let spoke_gap: f64 = sum / n as f64;
 
         // next_f64() ∈ [0.0, 1.0)
-        let spin = thread_rng().next_f64() * spoke_gap;
+        let spin = self.rng.next_f64() * spoke_gap;
 
         let mut i: usize = 0;
         let mut accumulated_weights = weights[0];
@@ -99,7 +116,7 @@ impl RandomChoice {
         }
 
         // add this condition, because float leads to inaccurate
-        // calculations which can lead to i >= weights.len() 
+        // calculations which can lead to i >= weights.len()
         while choices.len() < weights.len() {
             choices.push(&samples[i]);
         }
@@ -112,7 +129,7 @@ impl RandomChoice {
     /// @invariant sum of weights must not overflow.
     /// @param samples The to be selected samples
     /// @param weights Weights that get chosen by their weight/probability. One weight can be greater 1.
-    pub fn random_choice_in_place_f64<T: Clone>(samples: &mut [T], weights: &[f64]) {
+    pub fn random_choice_in_place_f64<T: Clone>(&mut self, samples: &mut [T], weights: &[f64]) {
         if weights.len() < 2 {
             return;
         }
@@ -122,7 +139,7 @@ impl RandomChoice {
         let spoke_gap: f64 = sum / n as f64;
 
         // next_f64() ∈ [0.0, 1.0)
-        let spin = thread_rng().next_f64() * spoke_gap;
+        let spin = self.rng.next_f64() * spoke_gap;
 
         let mut i: usize = 0;
         let mut j: usize = 0;
@@ -140,15 +157,19 @@ impl RandomChoice {
         }
 
         // add this condition, because float leads to inaccurate
-        // calculations which can lead to i >= weights.len() 
+        // calculations which can lead to i >= weights.len()
         while i < weights.len() {
             samples[i] = samples[j].clone();
             i += 1
         }
-        
+
     }
 
-    pub fn random_choice_f32<'a, T>(samples: &'a [T], weights: &[f32], n: usize) -> Vec<&'a T> {
+    pub fn random_choice_f32<'a, T>(&mut self,
+                                    samples: &'a [T],
+                                    weights: &[f32],
+                                    n: usize)
+                                    -> Vec<&'a T> {
         if weights.len() == 0 || n == 0 {
             return Vec::new();
         }
@@ -157,14 +178,14 @@ impl RandomChoice {
         let spoke_gap: f64 = sum / n as f64;
 
         // next_f64() ∈ [0.0, 1.0)
-        let spin = thread_rng().next_f64() * spoke_gap;
+        let spin = self.rng.next_f64() * spoke_gap;
 
         let mut i: usize = 0;
         let mut accumulated_weights = weights[0] as f64;
         let mut choices: Vec<&T> = Vec::with_capacity(n);
         let mut current_spoke: f64 = spin;
 
-        while current_spoke < sum { 
+        while current_spoke < sum {
             while accumulated_weights < current_spoke {
                 i += 1;
                 accumulated_weights += weights[i] as f64;
@@ -174,7 +195,7 @@ impl RandomChoice {
         }
 
         // add this condition, because float leads to inaccurate
-        // calculations which can lead to i >= weights.len() 
+        // calculations which can lead to i >= weights.len()
         while choices.len() < weights.len() {
             choices.push(&samples[i]);
         }
@@ -182,7 +203,7 @@ impl RandomChoice {
         choices
     }
 
-    pub fn random_choice_in_place_f32<T: Clone>(samples: &mut [T], weights: &[f32]) {
+    pub fn random_choice_in_place_f32<T: Clone>(&mut self, samples: &mut [T], weights: &[f32]) {
         if weights.len() < 2 {
             return;
         }
@@ -192,7 +213,7 @@ impl RandomChoice {
         let spoke_gap: f64 = sum / n as f64;
 
         // next_f64() ∈ [0.0, 1.0)
-        let spin = thread_rng().next_f64() * spoke_gap;
+        let spin = self.rng.next_f64() * spoke_gap;
 
         let mut i: usize = 0;
         let mut j: usize = 0;
@@ -210,7 +231,7 @@ impl RandomChoice {
         }
 
         // add this condition, because float leads to inaccurate
-        // calculations which can lead to i >= weights.len() 
+        // calculations which can lead to i >= weights.len()
         while i < weights.len() {
             samples[i] = samples[j].clone();
             i += 1
