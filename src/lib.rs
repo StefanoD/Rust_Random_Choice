@@ -57,6 +57,26 @@
 //! }
 //! # }
 //! ```
+//! ## With custom seed
+//! ```
+//! extern crate random_choice;
+//! extern crate rand;
+//!
+//! use self::random_choice::RandomChoice;
+//! use self::rand::thread_rng;
+//!
+//! # fn main() {
+//! let mut samples = vec!["hi", "this", "is", "a", "test!"];
+//! let weights: Vec<f64> = vec![5.6, 7.8, 9.7, 1.1, 2.0];
+//!
+//! let mut random_choice = RandomChoice::new(thread_rng());
+//! random_choice.random_choice_in_place_f64(&mut samples, &weights);
+//!
+//! for sample in samples {
+//!     print!("{}, ", sample);
+//! }
+//! # }
+//! ```
 
 extern crate rand;
 
