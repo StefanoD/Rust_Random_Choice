@@ -37,7 +37,7 @@
 //! extern crate random_choice;
 //! use self::random_choice::random_choice;
 //!
-//!# fn main() {
+//! # fn main() {
 //! let capacity: usize = 500;
 //! let mut samples: Vec<usize> = Vec::with_capacity(capacity);
 //! let mut weights: Vec<f64> = Vec::with_capacity(capacity);
@@ -63,20 +63,20 @@
 //! extern crate random_choice;
 //! use random_choice::RandomChoice;
 //! use rand::SeedableRng;
-
+//!
 //! fn main() {
 //!     let mut samples = vec!["hi", "this", "is", "a", "test!"];
 //!     let weights: Vec<f64> = vec![5.6, 7.8, 9.7, 1.1, 2.0];
-//! 
+//!
 //!     let rng = rand::StdRng::from_seed(&[5000, 44, 55, 199]);
 //!
 //!     let mut random_choice = RandomChoice::new(rng);
 //!     random_choice.random_choice_in_place_f64(&mut samples, &weights);
-
+//!
 //!     for sample in samples {
 //!         print!("{}, ", sample);
 //!     }
-//!#}
+//! }
 //! ```
 
 extern crate rand;
