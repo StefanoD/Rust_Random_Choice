@@ -63,17 +63,18 @@ fn main() {
 ```
 ### With Custom Seed
 ```rust
-extern crate random_choice;
 extern crate rand;
-
-use self::random_choice::RandomChoice;
-use self::rand::thread_rng;
+extern crate random_choice;
+use random_choice::RandomChoice;
+use rand::SeedableRng;
 
 fn main() {
     let mut samples = vec!["hi", "this", "is", "a", "test!"];
     let weights: Vec<f64> = vec![5.6, 7.8, 9.7, 1.1, 2.0];
 
-    let mut random_choice = RandomChoice::new(thread_rng());
+    let rng = rand::StdRng::from_seed(&[5000, 44, 55, 199]);
+
+    let mut random_choice = RandomChoice::new(rng);
     random_choice.random_choice_in_place_f64(&mut samples, &weights);
 
     for sample in samples {
