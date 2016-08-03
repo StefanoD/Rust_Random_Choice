@@ -41,7 +41,7 @@
 //! }
 //! # }
 //! ```
-//! ## With custom seed
+//! ## With Custom Seed
 //! ```
 //! extern crate rand;
 //! extern crate random_choice;
