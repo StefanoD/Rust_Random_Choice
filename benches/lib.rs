@@ -1,6 +1,7 @@
 #![cfg_attr(test, feature(test))]
 
 extern crate random_choice;
+extern crate rand;
 extern crate test;
 
 
@@ -8,6 +9,8 @@ extern crate test;
 mod benches {
     use test::Bencher;
     use random_choice::random_choice;
+    use random_choice::RandomChoice;
+    use rand::SeedableRng;
 
     #[bench]
     fn bench_random_choice_1000_it_f64(b: &mut Bencher) {
@@ -126,6 +129,46 @@ mod benches {
         }
         b.iter(|| {
             random_choice().random_choice_in_place_f32(&mut samples, &weights);
+        });
+    }
+
+    #[bench]
+    fn test_random_choice_with_seed_f64(b: &mut Bencher) {
+        let capacity: usize = 1000;
+        let mut samples: Vec<usize> = Vec::with_capacity(capacity);
+        let mut weights: Vec<f64> = Vec::with_capacity(capacity);
+
+        for i in 0..capacity {
+            samples.push(i);
+            weights.push(i as f64);
+        }
+
+        let rng = super::rand::StdRng::from_seed(&[5000, 44, 55, 199]);
+        let mut random_choice = RandomChoice::new(rng);
+
+        let number_choices = 1000;
+
+        b.iter(|| {
+            random_choice.random_choice_f64(&samples, &weights, number_choices);
+        });
+    }
+
+    #[bench]
+    fn test_random_choice_with_seed_in_place_f64(b: &mut Bencher) {
+        let capacity: usize = 1000;
+        let mut samples: Vec<usize> = Vec::with_capacity(capacity);
+        let mut weights: Vec<f64> = Vec::with_capacity(capacity);
+
+        for i in 0..capacity {
+            samples.push(i);
+            weights.push(i as f64);
+        }
+
+        let rng = super::rand::StdRng::from_seed(&[5000, 44, 55, 199]);
+        let mut random_choice = RandomChoice::new(rng);
+
+        b.iter(|| {
+            random_choice.random_choice_in_place_f64(&mut samples, &weights);
         });
     }
 }

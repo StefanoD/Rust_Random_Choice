@@ -1,9 +1,12 @@
 extern crate random_choice;
+extern crate rand;
 
 #[cfg(test)]
 mod tests {
     use std::collections::BTreeMap;
     use random_choice::random_choice;
+    use random_choice::RandomChoice;
+    use rand::SeedableRng;
 
     #[test]
     fn test_random_choice_f64() {
@@ -109,4 +112,68 @@ mod tests {
         }
     }
 
+    #[test]
+    fn test_random_choice_with_seed_f64() {
+        let capacity: usize = 500;
+        let mut samples: Vec<usize> = Vec::with_capacity(capacity);
+        let mut weights: Vec<f64> = Vec::with_capacity(capacity);
+
+        for i in 0..capacity {
+            samples.push(i);
+            weights.push(i as f64);
+        }
+
+        let rng = super::rand::StdRng::from_seed(&[5000, 44, 55, 199]);
+        let mut random_choice = RandomChoice::new(rng);
+
+        let number_choices = 10000;
+        let choices = random_choice.random_choice_f64(&samples, &weights, number_choices);
+
+        assert!(choices.len() == number_choices);
+
+        let mut weight_counter = BTreeMap::new();
+
+        for choice in choices {
+            let counter = weight_counter.entry(choice).or_insert(0);
+            *counter += 1;
+        }
+
+        let mut last_value: usize = 0;
+
+        for (_, value) in &weight_counter {
+            assert!((last_value as i32 - (*value) as i32).abs() <= 2);
+            last_value = *value;
+        }
+    }
+
+    #[test]
+    fn test_random_choice_with_seed_in_place_f64() {
+        let capacity: usize = 500;
+        let mut samples: Vec<usize> = Vec::with_capacity(capacity);
+        let mut weights: Vec<f64> = Vec::with_capacity(capacity);
+
+        for i in 0..capacity {
+            samples.push(i);
+            weights.push(i as f64);
+        }
+
+        let rng = super::rand::StdRng::from_seed(&[5000, 44, 55, 199]);
+        let mut random_choice = RandomChoice::new(rng);
+
+        random_choice.random_choice_in_place_f64(&mut samples, &weights);
+
+        let mut weight_counter = BTreeMap::new();
+
+        for sample in samples {
+            let counter = weight_counter.entry(sample).or_insert(0);
+            *counter += 1;
+        }
+
+        let mut last_value: usize = 0;
+
+        for (_, value) in &weight_counter {
+            assert!((last_value as i32 - (*value) as i32).abs() <= 2);
+            last_value = *value;
+        }
+    }
 }
