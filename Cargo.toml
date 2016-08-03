@@ -4,7 +4,7 @@ version = "0.2.0"
 authors = ["Stefano Di Martino <stefano.d@posteo.de>"]
 description = "Chooses samples randomly by their weights/probabilities."
 repository = "https://github.com/StefanoD/Rust_Random_Choice"
-documentation = "https://github.com/StefanoD/Rust_Random_Choice#examples"
+documentation = "https://github.com/StefanoD/Rust_Random_Choice#usage"
 keywords = ["random_choice"]
 license = "Apache-2.0"
 
