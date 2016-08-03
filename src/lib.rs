@@ -16,7 +16,7 @@
 //! - **Monte Carlo Localization**: Resampling of _n_ particles by their weight **_w_**
 //!
 //! # Examples
-//! ## Default
+//! ## Default Way
 //! ```
 //! extern crate random_choice;
 //! use self::random_choice::random_choice;
