@@ -29,7 +29,7 @@ random_choice = "*"
 
 ## Examples
 ## Default Way
-```
+```rust
 extern crate random_choice;
 use self::random_choice::random_choice;
 
@@ -54,7 +54,7 @@ for choice in choices {
 # }
 ```
 ## With Custom Seed
-```
+```rust
 extern crate rand;
 extern crate random_choice;
 use random_choice::RandomChoice;
