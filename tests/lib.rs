@@ -89,30 +89,6 @@ mod tests {
     }
 
     #[test]
-    fn test_random_choice_in_place_f64() {
-        let mut samples = vec!["hi", "this", "is", "a", "test!"];
-        let weights: Vec<f64> = vec![1.0, 1.0, 1.0, 1.0, 1.0];
-
-        random_choice().random_choice_in_place_f64(&mut samples, &weights);
-
-        for sample in samples {
-            print!("{}, ", sample);
-        }
-    }
-
-    #[test]
-    fn test_random_choice_in_place_f32() {
-        let mut samples = vec!["hi", "this", "is", "a", "test!"];
-        let weights: Vec<f32> = vec![1.0, 1.0, 1.0, 1.0, 1.0];
-
-        random_choice().random_choice_in_place_f32(&mut samples, &weights);
-
-        for sample in samples {
-            print!("{}, ", sample);
-        }
-    }
-
-    #[test]
     fn test_random_choice_with_seed_f64() {
         let capacity: usize = 500;
         let mut samples: Vec<usize> = Vec::with_capacity(capacity);
@@ -135,37 +111,6 @@ mod tests {
 
         for choice in choices {
             let counter = weight_counter.entry(choice).or_insert(0);
-            *counter += 1;
-        }
-
-        let mut last_value: usize = 0;
-
-        for (_, value) in &weight_counter {
-            assert!((last_value as i32 - (*value) as i32).abs() <= 2);
-            last_value = *value;
-        }
-    }
-
-    #[test]
-    fn test_random_choice_with_seed_in_place_f64() {
-        let capacity: usize = 500;
-        let mut samples: Vec<usize> = Vec::with_capacity(capacity);
-        let mut weights: Vec<f64> = Vec::with_capacity(capacity);
-
-        for i in 0..capacity {
-            samples.push(i);
-            weights.push(i as f64);
-        }
-
-        let rng = super::rand::StdRng::from_seed(&[5000, 44, 55, 199]);
-        let mut random_choice = RandomChoice::new(rng);
-
-        random_choice.random_choice_in_place_f64(&mut samples, &weights);
-
-        let mut weight_counter = BTreeMap::new();
-
-        for sample in samples {
-            let counter = weight_counter.entry(sample).or_insert(0);
             *counter += 1;
         }
 

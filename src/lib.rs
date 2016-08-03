@@ -16,23 +16,7 @@
 //! - **Monte Carlo Localization**: Resampling of _n_ particles by their weight **_w_**
 //!
 //! # Examples
-//! ## In Place Variant
-//! ```
-//! extern crate random_choice;
-//! use self::random_choice::random_choice;
-//!
-//! # fn main() {
-//! let mut samples = vec!["hi", "this", "is", "a", "test!"];
-//! let weights: Vec<f64> = vec![5.6, 7.8, 9.7, 1.1, 2.0];
-//!
-//! random_choice().random_choice_in_place_f64(&mut samples, &weights);
-//!
-//! for sample in samples {
-//!     print!("{}, ", sample);
-//! }
-//! # }
-//! ```
-//! ## N Selection Variant
+//! ## Default
 //! ```
 //! extern crate random_choice;
 //! use self::random_choice::random_choice;
@@ -71,10 +55,11 @@
 //!     let rng = rand::StdRng::from_seed(&[5000, 44, 55, 199]);
 //!
 //!     let mut random_choice = RandomChoice::new(rng);
-//!     random_choice.random_choice_in_place_f64(&mut samples, &weights);
+//!     let number_choices = 100;
+//!     let choices = random_choice.random_choice_f64(&mut samples, &weights, number_choices);
 //!
-//!     for sample in samples {
-//!         print!("{}, ", sample);
+//!     for choice in choices {
+//!         print!("{}, ", choice);
 //!     }
 //! }
 //! ```
@@ -145,47 +130,6 @@ impl<RNG: Rng> RandomChoice<RNG> {
         choices
     }
 
-    /// Chooses n samples by their weights. The greater their weights the more likely they get chosen.
-    /// The result gets saved directly in the samples argument.
-    /// @invariant sum of weights must not overflow.
-    /// @param samples The to be selected samples
-    /// @param weights Weights that get chosen by their weight/probability. One weight can be greater 1.
-    pub fn random_choice_in_place_f64<T: Clone>(&mut self, samples: &mut [T], weights: &[f64]) {
-        if weights.len() < 2 {
-            return;
-        }
-
-        let sum: f64 = weights.iter().fold(0.0, |acc, &i| acc + i);
-        let n: usize = weights.len();
-        let spoke_gap: f64 = sum / n as f64;
-
-        // next_f64() ∈ [0.0, 1.0)
-        let spin = self.rng.next_f64() * spoke_gap;
-
-        let mut i: usize = 0;
-        let mut j: usize = 0;
-        let mut accumulated_weights = weights[0];
-        let mut current_spoke: f64 = spin;
-
-        while current_spoke < sum {
-            while accumulated_weights < current_spoke {
-                j += 1;
-                accumulated_weights += weights[j];
-            }
-            samples[i] = samples[j].clone();
-            current_spoke += spoke_gap;
-            i += 1
-        }
-
-        // add this condition, because float leads to inaccurate
-        // calculations which can miss some samples
-        while i < weights.len() {
-            samples[i] = samples[j].clone();
-            i += 1
-        }
-
-    }
-
     pub fn random_choice_f32<'a, T>(&mut self,
                                     samples: &'a [T],
                                     weights: &[f32],
@@ -222,40 +166,5 @@ impl<RNG: Rng> RandomChoice<RNG> {
         }
 
         choices
-    }
-
-    pub fn random_choice_in_place_f32<T: Clone>(&mut self, samples: &mut [T], weights: &[f32]) {
-        if weights.len() < 2 {
-            return;
-        }
-
-        let sum: f64 = weights.iter().fold(0.0, |acc, &i| acc + i as f64);
-        let n: usize = weights.len();
-        let spoke_gap: f64 = sum / n as f64;
-
-        // next_f64() ∈ [0.0, 1.0)
-        let spin = self.rng.next_f64() * spoke_gap;
-
-        let mut i: usize = 0;
-        let mut j: usize = 0;
-        let mut accumulated_weights = weights[0] as f64;
-        let mut current_spoke: f64 = spin;
-
-        while current_spoke < sum {
-            while accumulated_weights < current_spoke {
-                j += 1;
-                accumulated_weights += weights[j] as f64;
-            }
-            samples[i] = samples[j].clone();
-            current_spoke += spoke_gap;
-            i += 1
-        }
-
-        // add this condition, because float leads to inaccurate
-        // calculations which can miss some samples
-        while i < weights.len() {
-            samples[i] = samples[j].clone();
-            i += 1
-        }
     }
 }
