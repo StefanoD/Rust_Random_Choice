@@ -29,32 +29,24 @@ random_choice = "*"
 
 ## Examples
 ## Default Way
-```
+```rust
 extern crate random_choice;
 use self::random_choice::random_choice;
 
-# fn main() {
-let capacity: usize = 500;
-let mut samples: Vec<usize> = Vec::with_capacity(capacity);
-let mut weights: Vec<f64> = Vec::with_capacity(capacity);
+fn main() {
+    let mut samples = vec!["hi", "this", "is", "a", "test!"];
+    let weights: Vec<f64> = vec![5.6, 7.8, 9.7, 1.1, 2.0];
 
-for i in 0..capacity {
-    samples.push(i);
-    weights.push(i as f64);
+    let number_choices = 100;
+    let choices = random_choice().random_choice_f64(&samples, &weights, number_choices);
+
+    for choice in choices {
+        print!("{}, ", choice);
+    }
 }
-
-let number_choices = 10000;
-let choices = random_choice().random_choice_f64(&samples, &weights, number_choices);
-
-assert!(choices.len() == number_choices);
-
-for choice in choices {
-    print!("{}, ", choice);
-}
-# }
 ```
 ## With Custom Seed
-```
+```rust
 extern crate rand;
 extern crate random_choice;
 use random_choice::RandomChoice;
