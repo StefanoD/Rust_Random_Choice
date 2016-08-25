@@ -89,6 +89,36 @@ mod tests {
     }
 
     #[test]
+    fn test_random_choice_samples_zero_f64() {
+        let capacity: usize = 1000;
+        let samples: Vec<usize> = Vec::new();
+        let mut weights: Vec<f64> = Vec::with_capacity(capacity);
+
+        for i in 0..capacity {
+            weights.push((i + 1usize) as f64);
+        }
+
+        let choices = random_choice().random_choice_f64(&samples, &weights, capacity);
+
+        assert!(choices.len() == 0);
+    }
+
+    #[test]
+    fn test_random_choice_weights_zero_f64() {
+        let capacity: usize = 1000;
+        let mut samples: Vec<usize> = Vec::with_capacity(capacity);
+        let weights: Vec<f64> = Vec::new();
+
+        for i in 0..capacity {
+            samples.push(i + 1);
+        }
+
+        let choices = random_choice().random_choice_f64(&samples, &weights, capacity);
+
+        assert!(choices.len() == 0);
+    }
+
+    #[test]
     fn test_random_choice_with_seed_f64() {
         let capacity: usize = 500;
         let mut samples: Vec<usize> = Vec::with_capacity(capacity);
