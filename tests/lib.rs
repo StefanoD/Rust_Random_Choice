@@ -89,6 +89,22 @@ mod tests {
     }
 
     #[test]
+    fn test_random_choice_zero_elements_f32() {
+        let capacity: usize = 1000;
+        let mut samples: Vec<usize> = Vec::with_capacity(capacity);
+        let mut weights: Vec<f32> = Vec::with_capacity(capacity);
+
+        for i in 0..capacity {
+            samples.push(i + 1);
+            weights.push((i + 1usize) as f32);
+        }
+
+        let choices = random_choice().random_choice_f32(&samples, &weights, 0 as usize);
+
+        assert!(choices.len() == 0);
+    }
+
+    #[test]
     fn test_random_choice_samples_zero_f64() {
         let capacity: usize = 1000;
         let samples: Vec<usize> = Vec::new();
@@ -104,6 +120,21 @@ mod tests {
     }
 
     #[test]
+    fn test_random_choice_samples_zero_f32() {
+        let capacity: usize = 1000;
+        let samples: Vec<usize> = Vec::new();
+        let mut weights: Vec<f32> = Vec::with_capacity(capacity);
+
+        for i in 0..capacity {
+            weights.push((i + 1usize) as f32);
+        }
+
+        let choices = random_choice().random_choice_f32(&samples, &weights, capacity);
+
+        assert!(choices.len() == 0);
+    }
+
+    #[test]
     fn test_random_choice_weights_zero_f64() {
         let capacity: usize = 1000;
         let mut samples: Vec<usize> = Vec::with_capacity(capacity);
@@ -114,6 +145,21 @@ mod tests {
         }
 
         let choices = random_choice().random_choice_f64(&samples, &weights, capacity);
+
+        assert!(choices.len() == 0);
+    }
+
+    #[test]
+    fn test_random_choice_weights_zero_f32() {
+        let capacity: usize = 1000;
+        let mut samples: Vec<usize> = Vec::with_capacity(capacity);
+        let weights: Vec<f32> = Vec::new();
+
+        for i in 0..capacity {
+            samples.push(i + 1);
+        }
+
+        let choices = random_choice().random_choice_f32(&samples, &weights, capacity);
 
         assert!(choices.len() == 0);
     }
