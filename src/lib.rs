@@ -89,7 +89,7 @@ impl<RNG: Rng> RandomChoice<RNG> {
                                     weights: &[f64],
                                     n: usize)
                                     -> Vec<&'a T> {
-        if weights.len() == 0 || n == 0 {
+        if weights.len() == 0 || samples.len() == 0 || n == 0 {
             return Vec::new();
         }
 
