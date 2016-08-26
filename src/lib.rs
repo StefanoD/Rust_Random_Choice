@@ -115,7 +115,7 @@ impl<RNG: Rng> RandomChoice<RNG> {
 
         // add this condition, because float leads to inaccurate
         // calculations which can miss some samples
-        while choices.len() < weights.len() {
+        while choices.len() < n {
             choices.push(&samples[i]);
         }
 
@@ -153,7 +153,7 @@ impl<RNG: Rng> RandomChoice<RNG> {
 
         // add this condition, because float leads to inaccurate
         // calculations which can miss some samples
-        while choices.len() < weights.len() {
+        while choices.len() < n {
             choices.push(&samples[i]);
         }
 
