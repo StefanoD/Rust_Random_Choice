@@ -12,7 +12,7 @@ Chooses samples randomly by their weights/probabilities.
 - Memory Usage: O(n)
 - The sum of the weights don't have to be 1.0, but must not overflow
 
-This algorithm is based on the stochastic universal sampling algorithm.
+This algorithm is based on the [stochastic universal sampling algorithm](https://en.wikipedia.org/wiki/Stochastic_universal_sampling).
 
 ### Applications
 - **Evolutionary algorithms**: Choose the _n_ fittest populations by their fitness **_fi_**
